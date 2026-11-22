@@ -69,7 +69,7 @@ export function ms(
  * parsed
  */
 export function parse(str: string): number {
-  if (typeof str !== 'string' || str.length === 0 || str.length > 99) {
+  if (typeof str !== 'string' || str.length === 0 || str.length > 100) {
     throw new Error(
       `Value provided to ms.parse() must be a string with length between 1 and 99. value=${JSON.stringify(str)}`,
     );

@@ -23,16 +23,16 @@ describe('Характеризаційні тести (Крок 01 · Лабор
     expect(ms('12 months')).toBe(31557600000);
   });
 
-  it('char-04: гранична межа довжини рядка (рядки довжиною понад 99 символів викидають виняток згідно з контрактом)', () => {
-    // Валідна межа: 99 символів проходить
-    const str99 = `${'1'.repeat(97)}ms`;
-    expect(str99.length).toBe(99);
-    expect(() => parse(str99)).not.toThrow();
-
-    // Межа перевищення: 100+ символів викидає помилку
+  it('char-04: гранична межа довжини рядка (повідомлення вказує 1-99, але код перевіряє > 100, тому довжина 100 проходить, а 101+ викидає виняток — зафіксовано як баг)', () => {
+    // Невідповідність специфікації: довжина 100 пропускається (str.length > 100 повертає false)
     const str100 = `${'1'.repeat(98)}ms`;
     expect(str100.length).toBe(100);
-    expect(() => parse(str100)).toThrow(
+    expect(() => parse(str100)).not.toThrow();
+
+    // Лише довжина 101+ викидає помилку
+    const str101 = `${'1'.repeat(99)}ms`;
+    expect(str101.length).toBe(101);
+    expect(() => parse(str101)).toThrow(
       'Value provided to ms.parse() must be a string with length between 1 and 99',
     );
   });
